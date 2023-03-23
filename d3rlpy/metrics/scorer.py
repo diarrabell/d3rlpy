@@ -176,7 +176,7 @@ def discounted_sum_of_advantage_scorer(
 
 def average_value_estimation_scorer(
     algo: AlgoProtocol, episodes: List[Episode]
-) -> float:
+) -> list:
     r"""Returns average value estimation.
 
     This metrics suggests the scale for estimation of Q functions.
@@ -201,7 +201,8 @@ def average_value_estimation_scorer(
             actions = algo.predict(batch.observations)
             values = algo.predict_value(batch.observations, actions)
             total_values += cast(np.ndarray, values).tolist()
-    return float(np.mean(total_values))
+    #return float(np.mean(total_values))
+    return total_values
 
 def return_q_values(algo: AlgoProtocol, episodes: List[Episode]
 ) -> list:

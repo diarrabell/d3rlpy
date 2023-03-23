@@ -113,6 +113,8 @@ def td_error_scorer(algo: AlgoProtocol, episodes: List[Episode]) -> float:
     return float(np.mean(total_errors))
 
 
+
+
 def discounted_sum_of_advantage_scorer(
     algo: AlgoProtocol, episodes: List[Episode]
 ) -> float:
@@ -201,6 +203,15 @@ def average_value_estimation_scorer(
             total_values += cast(np.ndarray, values).tolist()
     return float(np.mean(total_values))
 
+def return_q_values(algo: AlgoProtocol, episodes: List[Episode]
+) -> list:
+    total_values = []
+    for episode in episodes:
+        for batch in _make_batches(episode, WINDOW_SIZE, algo.n_frames):
+            actions = algo.predict(batch.observations)
+            values = algo.predict_value(batch.observations, actions)
+            total_values += cast(np.ndarray, values).tolist()
+    return total_values
 
 def value_estimation_std_scorer(
     algo: AlgoProtocol, episodes: List[Episode]
